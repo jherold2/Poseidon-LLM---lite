@@ -82,20 +82,3 @@ Set the following secrets before running the workflows above:
 > **Notes:**  
 > - Supervisor Agent routes queries to specialized agents.  
 > - Each agent has its own toolset for querying data and generating insights.  
-> - Shared `ConversationCache` and LLM endpoints maintain context and inference consistency.  
-
-## License
-Copyright (c) 2025 Cedea Seafood PT CitraDimensi Arthali. All rights reserved.
-
-This software, including all associated code, models, data, and documentation (the "Software"), is proprietary and confidential to Cedea Seafood PT CitraDimensi Arthali.
-
-1. **Internal Use Only**: The Software is licensed solely for internal use by employees and authorized personnel of Cedea Seafood PT CitraDimensi Arthali for the purpose of generating business insights and supporting internal operations.
-
-2. **Restrictions**: You may not copy, modify, distribute, sell, sublicense, or disclose the Software to any third party without explicit written permission from Cedea Seafood PT CitraDimensi Arthali.
-
-3. **No Warranty**: The Software is provided "as is" without any warranties, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
-
-4. **Liability**: Cedea Seafood PT CitraDimensi Arthali shall not be liable for any damages arising from the use or inability to use the Software.
-
-## Contact
-For support, contact the Data Science team at Cedea Seafood PT CitraDimensi Arthali.
