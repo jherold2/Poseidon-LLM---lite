@@ -1,7 +1,5 @@
 # Poseidon - Cedea's proprietary LLM with Agentic AI
 
-![Poseidon Avatar](poseidon-core/docs/diagrams/gh_avatar.png)
-
 ## Purpose
 The internal Large Language Model (LLM) for Cedea Seafood PT CitraDimensi Arthali, hereafter referred to as Poseidon, is designed to deliver actionable business insights from internal data, enhancing decision-making across sales, purchasing, logistics, manufacturing, and accounting. The LLM generates structured outputs for tasks such as upselling, customer segmentation, sales forecasting, and risk analysis, ensuring secure, on-premises processing to maintain data privacy and compliance.
 
