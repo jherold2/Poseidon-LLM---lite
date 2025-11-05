@@ -1,0 +1,83 @@
+version: 1
+environment: ${POSEIDON_ENVIRONMENT:-local}
+
+# Helps the supervisor decide which modules are in play without touching code.
+enabled_modules:
+  - sales
+  - purchasing
+  - logistics
+  - manufacturing
+  - accounting
+  - inference
+  # add optional modules (communications, support, etc.) as needed
+
+# Runtime feature toggles for cross-cutting tools.
+tools:
+  document_tools: ${POSEIDON_ENABLE_DOCS:-false}     # doc retrieval / RAG
+  metric_tools: true                                 # allow semantic layer calls
+  feedback_tools: true
+  notification_tools: ${POSEIDON_ENABLE_EMAIL:-false}
+  streaming_traces: ${POSEIDON_TRACE_STREAM:-false}
+
+# Prompts are sourced from Langfuse; local is a fallback.
+prompt:
+  mode: ${POSEIDON_PROMPT_MODE:-langfuse}            # langfuse | local
+  local:
+    directory: prompts/full
+  langfuse:
+    host: ${LANGFUSE_HOST:-https://cdaseafood.ddns.net/langfuse}
+    project_id: ${LANGFUSE_PROJECT_ID:-poseidon}
+    public_key: ${LANGFUSE_PUBLIC_KEY:-}
+    secret_key: ${LANGFUSE_SECRET_KEY:-}
+    prompt_name: "{agent_name}"
+    agents:
+      sales_agent:
+        prompt_name: sales_prompt
+      purchasing_agent:
+        prompt_name: purchasing_prompt
+      logistics_agent:
+        prompt_name: logistics_prompt
+      manufacturing_agent:
+        prompt_name: manufacturing_prompt
+      accounting_agent:
+        prompt_name: accounting_prompt
+      comms_agent:
+        prompt_name: comms_prompt
+      inference_agent:
+        prompt_name: inference_prompt
+
+# Guardrails protect every agent call.
+guardrails:
+  freshness:
+    sales:
+      table: cda_it_custom.fact_sales_mv
+      timestamp_column: sales_date
+      ttl_seconds: 600
+    purchasing:
+      table: cda_it_custom.fact_purchases
+      timestamp_column: date_order
+    inference:
+      table: cda_it_custom.fact_sales_mv
+      timestamp_column: order_date
+  null_rate:
+    sales:
+      - table: cda_it_custom.fact_sales_mv
+        column: customer_ref
+        max_null_rate: 0.05
+    purchasing:
+      - table: cda_it_custom.fact_purchases
+        column: supplier_id
+        max_null_rate: 0.02
+
+# Optional overrides for per-environment behaviour.
+overrides:
+  staging:
+    enabled_modules: [sales, purchasing, inference]
+    tools:
+      document_tools: false
+      notification_tools: false
+  production:
+    tools:
+      document_tools: false
+      notification_tools: true
+      streaming_traces: true

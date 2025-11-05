@@ -1,0 +1,17 @@
+name: dpo_standard_v1
+type: dpo
+base_model: models/sft/standard_v1
+reference_model: models/sft/standard_v1
+seed: 42
+datasets:
+  preferences: tuning/rlhf/preference_pairs/initial_pairs.jsonl
+hyperparameters:
+  beta: 0.1
+  batch_size: 16
+  gradient_accumulation_steps: 2
+  learning_rate: 5e-6
+  num_epochs: 2
+  max_length: 1024
+logging:
+  mlflow_experiment: poseidon-tuning
+  checkpoint_dir: models/dpo/standard_v1

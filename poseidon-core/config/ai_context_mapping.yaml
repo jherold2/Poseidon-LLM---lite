@@ -1,0 +1,104 @@
+version: 1.0
+last_updated: 2025-10-01
+
+context_mapping:
+  - placeholder: top_customers
+    description: >
+      High-risk or high-value customers based on churn probability, inactivity,
+      or lifetime value. Used to prioritize reactivation and upsell actions.
+    source_table: dim_customer
+    source_columns:
+      - customer_id
+      - customer_name
+      - last_order_date
+      - sales_region
+      - active
+    join_dependencies: [fact_sales_orders]
+    metric_logic: >
+      SELECT customer_id, customer_name, last_order_date, sales_region
+      FROM dim_customer
+      WHERE active = true
+        AND (NOW() - last_order_date) > INTERVAL '60 days'
+        OR risk_score > 0.8
+      ORDER BY risk_score DESC
+      LIMIT 10;
+    refresh_frequency: daily
+    owner_team: Sales Analytics
+    trigger_condition: "risk_score > 0.8 OR inactivity_days > 60"
+
+  - placeholder: recommended_promo
+    description: >
+      Promotions most likely to convert based on historical segment uplift.
+    source_table: dim_pricelist
+    source_columns:
+      - promo_id: pricelist_id
+      - name: pricelist_name
+      - discount_pct: percent_price
+      - validity: date_end
+    metric_logic: >
+      SELECT pricelist_id, pricelist_name, percent_price, date_end
+      FROM dim_pricelist
+      WHERE active = true
+        AND date_end > NOW()
+      ORDER BY percent_price DESC
+      LIMIT 5;
+    refresh_frequency: weekly
+    owner_team: Marketing Ops
+    trigger_condition: "validity > today()"
+
+  - placeholder: priority_invoices
+    description: >
+      Overdue invoices requiring escalation or follow-up.
+    source_table: fact_invoices
+    source_columns:
+      - invoice_id
+      - customer_id
+      - days_overdue
+      - amount
+    metric_logic: >
+      SELECT invoice_id, customer_id, days_overdue, amount
+      FROM fact_invoices
+      WHERE days_overdue > 30
+      ORDER BY days_overdue DESC;
+    refresh_frequency: daily
+    owner_team: Finance
+    trigger_condition: "days_overdue > 30"
+
+  - placeholder: aging_inventory
+    description: >
+      SKUs held in stock > 90 days with quantity > 0.
+    source_table: fact_inventory
+    source_columns:
+      - sku
+      - days_in_stock
+      - qty
+      - warehouse_id
+    join_dependencies: [dim_location, dim_product]
+    metric_logic: >
+      SELECT sku, days_in_stock, qty, warehouse_id
+      FROM fact_inventory
+      WHERE days_in_stock > 90
+      ORDER BY days_in_stock DESC;
+    refresh_frequency: daily
+    owner_team: Supply Chain
+    trigger_condition: "days_in_stock > 90"
+
+  - placeholder: budget_variances
+    description: >
+      Cost centers with >10% variance vs. planned budget.
+    source_table: dim_budget
+    source_columns:
+      - analytic_account
+      - planned_amount
+      - actual_amount
+      - variance_pct
+    join_dependencies: [fact_accounting_invoice_mv]
+    metric_logic: >
+      SELECT analytic_account, planned_amount, actual_amount,
+             ((actual_amount - planned_amount)/planned_amount)*100 AS variance_pct
+      FROM dim_budget b
+      JOIN fact_gl_postings g ON b.analytic_account_id = g.analytic_account_id
+      WHERE ((actual_amount - planned_amount)/planned_amount)*100 > 10;
+    refresh_frequency: monthly
+    owner_team: FP&A
+    trigger_condition: "variance_pct > 10"

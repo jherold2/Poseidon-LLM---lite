@@ -1,0 +1,21 @@
+# Task Orchestrator Configuration
+# --------------------------------
+
+# 💡 Enable or disable fuzzy matching (partial string matches on job titles)
+fuzzy_matching: true
+
+# 🧠 Enable or disable semantic role matching (embedding-based)
+semantic_matching: true
+
+# 🧪 Historical feedback integration (boost scoring using prior responses)
+use_feedback_context: true
+
+# 🔎 Minimum semantic similarity threshold (0.0–1.0)
+semantic_similarity_threshold: 0.6
+
+# 📈 Weight multipliers for scoring (fine-tune how much each component matters)
+weights:
+  base_impact: 0.7
+  fuzzy_bonus: 0.05
+  semantic_bonus: 0.2
+  feedback_bonus: 0.1

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "poseidon-core"
+version = "0.1.0"
+description = "Poseidon supervisor orchestration core modules."
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Poseidon Labs", email = "engineering@poseidon.local" }
+]
+keywords = ["multi-agent", "orchestration", "analytics", "dbt", "langchain"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+"Source" = "https://github.com/jherold2/Poseidon"
+"Documentation" = "https://github.com/jherold2/Poseidon/tree/main/poseidon-core/docs"
+
+[project.scripts]
+poseidon-supervisor = "poseidon.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["poseidon*" ]
+
+[tool.setuptools.package-data]
+poseidon = ["**/*.yaml", "**/*.yml", "**/*.sql", "**/*.json", "**/*.md"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["config/requirements.txt"] }

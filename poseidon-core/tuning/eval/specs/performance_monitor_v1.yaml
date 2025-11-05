@@ -1,0 +1,10 @@
+name: performance_monitor_v1
+task_type: perf
+dataset: ../../runs/perf/perf_snapshot.json
+suite: null
+scorers:
+  - avg_latency_ms
+  - p95_latency_ms
+metadata:
+  owner: platform-perf
+  description: Aggregated latency measurements from automated load tests.

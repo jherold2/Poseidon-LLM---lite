@@ -1,0 +1,112 @@
+# config/logging_config.yaml
+version: 1
+disable_existing_loggers: false
+filters:
+  context:
+    (): poseidon.utils.logger_setup.ContextFilter
+  sanitize:
+    (): poseidon.utils.logger_setup.SensitiveDataFilter
+formatters:
+  structured:
+    (): poseidon.utils.logger_setup.StructuredFormatter
+    format: "%(asctime)s | %(levelname)s | %(module)s | session=%(session_id)s | trace=%(trace_id)s | agent=%(agent_name)s | %(message)s"
+  structured_json:
+    (): poseidon.utils.logger_setup.StructuredJSONFormatter
+  console:
+    (): poseidon.utils.logger_setup.ColorFormatter
+    format: "%(asctime)s | %(levelname)s | %(module)s | session=%(session_id)s | trace=%(trace_id)s | agent=%(agent_name)s | %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: console
+    stream: ext://sys.stdout
+    filters: [context, sanitize]
+  app_file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: structured
+    filename: logs/app/app.log
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf-8
+    filters: [context, sanitize]
+  workflow_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: structured
+    filename: logs/workflow/workflow.log
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf-8
+    filters: [context, sanitize]
+  inference_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: structured
+    filename: logs/inference/inference.log
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf-8
+    filters: [context, sanitize]
+  audit_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: structured
+    filename: logs/audit/audit.log
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf-8
+    filters: [context, sanitize]
+  agent_router:
+    class: poseidon.utils.logger_setup.AgentRoutingHandler
+    level: DEBUG
+    formatter: structured
+    directory: logs/agents
+    maxBytes: 10485760
+    backupCount: 5
+    filters: [context, sanitize]
+loggers:
+  poseidon:
+    level: INFO
+    handlers: [console, app_file]
+    propagate: false
+  poseidon.api:
+    level: INFO
+    handlers: [console, app_file]
+    propagate: false
+  poseidon.langgraph:
+    level: DEBUG
+    handlers: [console, app_file]
+    propagate: false
+  poseidon.workflows:
+    level: INFO
+    handlers: [console, workflow_file]
+    propagate: false
+  poseidon.agents:
+    level: DEBUG
+    handlers: [console, agent_router]
+    propagate: false
+  poseidon.inference:
+    level: DEBUG
+    handlers: [console, inference_file]
+    propagate: false
+  poseidon.tools:
+    level: INFO
+    handlers: [console, inference_file]
+    propagate: false
+  poseidon.observability:
+    level: INFO
+    handlers: [console, audit_file]
+    propagate: false
+  poseidon_cda:
+    level: INFO
+    handlers: [console, app_file]
+    propagate: false
+  poseidon_cda.agents:
+    level: DEBUG
+    handlers: [console, agent_router]
+    propagate: false
+root:
+  level: WARNING
+  handlers: [console]

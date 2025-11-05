@@ -1,0 +1,178 @@
+# =====================================================================
+# STANDARD PAYLOAD STRUCTURE
+# =====================================================================
+# All tasks using AI context follow this structure.
+# - `generated_at` and `task_id` are always present.
+# - `context_summary` is a one-sentence AI explanation of why these records matter.
+# - `ai_context` holds one or more sections, each keyed by placeholder name.
+# =====================================================================
+
+ai_context:
+
+  top_customers:
+    type: list[object]
+    fields:
+      - customer_id: string              # Unique customer identifier
+      - name: string                     # Customer name
+      - last_order_date: date            # Most recent order date
+      - risk_score: float                # 0.0 – 1.0 risk / opportunity score
+      - lifetime_value: float (optional) # Optional: total revenue over time
+    example:
+      - customer_id: "CUST-1012"
+        name: "PT AlfaMart Indonesia"
+        last_order_date: "2025-09-15"
+        risk_score: 0.92
+        lifetime_value: 1450000000.00
+      - customer_id: "CUST-1044"
+        name: "PT FreshMart"
+        last_order_date: "2025-09-18"
+        risk_score: 0.88
+
+  recommended_promo:
+    type: list[object]
+    fields:
+      - promo_id: string                  # Unique promotion identifier
+      - name: string                      # Promotion name
+      - discount_pct: float               # Discount percentage
+      - validity: date                    # End date of promo validity
+      - target_segment: string (optional) # Customer segment target
+    example:
+      - promo_id: "PROMO-Q4-2025-07"
+        name: "Q4 Holiday Bundle"
+        discount_pct: 15.0
+        validity: "2025-12-31"
+        target_segment: "Modern Trade"
+      - promo_id: "PROMO-Q4-2025-10"
+        name: "Inventory Clearance Sale"
+        discount_pct: 20.0
+        validity: "2025-11-15"
+
+  priority_invoices:
+    type: list[object]
+    fields:
+      - invoice_id: string               # Unique invoice identifier
+      - days_overdue: int                # Days past due date
+      - amount: float                    # Outstanding amount
+      - customer: string                 # Customer name
+      - escalation_risk: bool (optional) # Whether this invoice requires escalation
+    example:
+      - invoice_id: "INV-44023"
+        days_overdue: 45
+        amount: 250000000.00
+        customer: "PT Retail Nusantara"
+        escalation_risk: true
+      - invoice_id: "INV-44077"
+        days_overdue: 32
+        amount: 185000000.00
+        customer: "PT FreshMart"
+
+  flagged_pos:
+    type: list[object]
+    fields:
+      - po_id: string                     # Purchase order identifier
+      - price_deviation_pct: float        # Deviation from historical average price
+      - supplier: string                  # Supplier name
+      - sku: string (optional)            # SKU associated with PO
+      - reason: string (optional)         # Reason flagged
+    example:
+      - po_id: "PO-9032"
+        price_deviation_pct: 12.5
+        supplier: "PT BahanKimia"
+        sku: "SKU-882"
+        reason: "Above price tolerance"
+
+  aging_inventory:
+    type: list[object]
+    fields:
+      - sku: string                       # SKU code
+      - days_in_stock: int               # Days held in inventory
+      - qty: int                          # Quantity in stock
+      - warehouse: string (optional)     # Location
+    example:
+      - sku: "SKU-111"
+        days_in_stock: 140
+        qty: 1200
+        warehouse: "CDA Majalengka"
+      - sku: "SKU-220"
+        days_in_stock: 98
+        qty: 320
+
+  delayed_shipments:
+    type: list[object]
+    fields:
+      - shipment_id: string              # Shipment identifier
+      - days_late: int                   # Days past scheduled delivery
+      - sku: string                      # SKU or product involved
+      - customer: string                 # Customer or recipient
+      - reason: string (optional)        # Root cause (e.g., customs, supplier backlog)
+    example:
+      - shipment_id: "SHIP-4402"
+        days_late: 12
+        sku: "SKU-882"
+        customer: "PT HyperMart"
+        reason: "Port congestion"
+
+  downtime_events:
+    type: list[object]
+    fields:
+      - event_id: string                 # Downtime event ID
+      - line: string                     # Production line name
+      - minutes: int                     # Downtime duration in minutes
+      - cause: string                    # Root cause
+      - recurrence: int (optional)       # Number of times issue recurred
+    example:
+      - event_id: "DT-9911"
+        line: "Mixing Line B"
+        minutes: 245
+        cause: "Bearing failure"
+        recurrence: 2
+
+  yield_loss_batches:
+    type: list[object]
+    fields:
+      - batch_id: string                # Batch identifier
+      - product: string                 # Product name
+      - loss_pct: float                 # Yield loss percentage
+      - suspected_cause: string         # AI-inferred likely cause
+    example:
+      - batch_id: "BATCH-5521"
+        product: "Seafood Snack 250g"
+        loss_pct: 8.4
+        suspected_cause: "Inaccurate mixing ratio"
+
+  expiring_contracts:
+    type: list[object]
+    fields:
+      - supplier: string                # Supplier name
+      - contract_id: string             # Contract identifier
+      - expiry_date: date               # Contract expiration date
+      - renewal_status: string (optional) # e.g., "pending", "initiated", "renewed"
+    example:
+      - supplier: "PT IndoSupply"
+        contract_id: "CTR-2301"
+        expiry_date: "2025-10-31"
+        renewal_status: "pending"
+
+  budget_variances:
+    type: list[object]
+    fields:
+      - cost_center: string             # Cost center name or ID
+      - variance_pct: float             # Variance percentage vs. plan
+      - driver: string                  # Primary cause
+    example:
+      - cost_center: "Production - Line B"
+        variance_pct: 15.2
+        driver: "Increased utility consumption"
+
+  activity_conflicts:
+    type: list[object]
+    fields:
+      - model: string                   # Origin of conflict (system/process)
+      - record_id: string               # Associated record identifier
+      - last_activity_at: datetime      # Timestamp of last conflicting activity
+      - owner: string                   # Current owner or responsible party
+    example:
+      - model: "SalesOrder"
+        record_id: "SO-4452"
+        last_activity_at: "2025-09-29T10:42:00Z"
+        owner: "Sales Ops"

@@ -1,0 +1,10 @@
+# Example evaluation spec consumed by tuning.eval.runner
+name: <spec_name>
+task_type: <sft|dpo|perf>
+dataset: ../../data/eval/<file>.jsonl
+suite: <suite_name>
+scorers:
+  - chain_accuracy
+metadata:
+  owner: <team>
+  description: <what this spec validates>

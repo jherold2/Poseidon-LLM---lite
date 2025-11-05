@@ -1,0 +1,10 @@
+name: quality_assurance_v1
+task_type: sft
+dataset: ../../data/eval/quality_assurance_v1.jsonl
+suite: core_functional_v1
+scorers:
+  - chain_accuracy
+  - chain_precision
+metadata:
+  owner: qa
+  description: Focused samples to monitor answer style and groundedness.

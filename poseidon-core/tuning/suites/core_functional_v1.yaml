@@ -1,0 +1,28 @@
+name: core_functional_v1
+description: Baseline regression prompts covering revenue analytics, margin drilldowns, and operational health checks.
+owner: revops-insights
+frozen_on: 2025-02-01
+prompts:
+  - id: CFN-001
+    intent: "Summarise sales performance by region"
+    input: |
+      Provide a revenue summary for the past 30 days broken down by sales_region with margin commentary.
+    expected_behaviour:
+      - Use the metric catalog to pull revenue and gross margin metrics.
+      - Include a markdown table with `sales_region`, `total_sales_amount`, and `gross_margin_rate`.
+      - Flag any region where gross_margin_rate falls below 0.3.
+  - id: CFN-002
+    intent: "Investigate margin erosion"
+    input: |
+      Identify the top three customers with the sharpest decline in gross margin month over month.
+    expected_behaviour:
+      - Query margin trends for each customer via MetricFlow before falling back to SQL.
+      - Provide narrative insight explaining potential drivers using catalog data.
+      - Recommend a follow-up action for account managers.
+  - id: CFN-003
+    intent: "Inventory-assisted sales forecast"
+    input: |
+      Generate a 6-week sales forecast for category_level_2 = "Gadgets" and tie it back to on-hand inventory.
+    expected_behaviour:
+      - Chain forecast and inventory tools, returning structured JSON with recommended purchase quantity.
+      - Highlight confidence intervals and any stockout risk.

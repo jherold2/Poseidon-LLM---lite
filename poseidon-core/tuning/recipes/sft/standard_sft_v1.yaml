@@ -1,0 +1,19 @@
+name: sft_standard_v1
+type: sft
+base_model: mistral-7b-instruct
+seed: 42
+datasets:
+  train: tuning/data/sft/train.jsonl
+  validation: tuning/data/sft/validation.jsonl
+hyperparameters:
+  batch_size: 8
+  eval_batch_size: 4
+  learning_rate: 1.5e-5
+  num_epochs: 3
+  gradient_accumulation_steps: 4
+  lora_rank: 32
+  lora_alpha: 64
+  lora_dropout: 0.05
+logging:
+  mlflow_experiment: poseidon-tuning
+  checkpoint_dir: models/sft/standard_v1

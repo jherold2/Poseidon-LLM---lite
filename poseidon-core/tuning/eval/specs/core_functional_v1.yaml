@@ -1,0 +1,10 @@
+name: core_functional_v1
+task_type: sft
+dataset: ../../data/eval/core_functional_v1.jsonl
+suite: core_functional_v1
+scorers:
+  - chain_accuracy
+  - chain_precision
+metadata:
+  owner: revops-insights
+  description: Regression coverage for top revenue workflows.

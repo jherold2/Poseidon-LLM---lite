@@ -1,0 +1,10 @@
+name: safety_redteam_v1
+task_type: dpo
+dataset: ../../data/eval/safety_redteam_v1.jsonl
+suite: safety_redteam_v1
+scorers:
+  - preference_match_rate
+  - preference_precision
+metadata:
+  owner: safety-partnerships
+  description: Regression prompts aimed at jailbreak and misuse detection.

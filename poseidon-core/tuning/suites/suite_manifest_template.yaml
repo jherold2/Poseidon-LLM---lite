@@ -1,0 +1,14 @@
+name: <suite_name>
+description: <coverage_focus>
+owner: <team>
+frozen_on: <YYYY-MM-DD>
+prompts:
+  - id: <identifier>
+    intent: <short description>
+    input: |
+      <prompt text>
+    expected_behaviour:
+      - <assertion 1>
+      - <assertion 2>
+    guardrails:
+      - <safety requirement>

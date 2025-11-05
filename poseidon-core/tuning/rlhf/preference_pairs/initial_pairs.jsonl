@@ -1,0 +1,1 @@
+{"prompt": "Summarise last month's sales margin by customer", "chosen": [{"tool": "query_sales_metrics", "args": {"metric": "gross_margin_rate"}}], "rejected": [{"tool": "query_sales_metrics", "args": {"metric": "total_sales_amount"}}]}

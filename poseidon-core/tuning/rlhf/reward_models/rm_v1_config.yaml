@@ -1,0 +1,13 @@
+name: rm_v1
+base_model: mistral-7b-sft
+mlflow_registry: models:/poseidon-rm/rm_v1
+training:
+  epochs: 3
+  batch_size: 16
+  learning_rate: 2e-5
+  warmup_steps: 200
+  max_length: 1024
+data:
+  preference_pairs: tuning/rlhf/preference_pairs/initial_pairs.jsonl
+monitoring:
+  eval_spec: tuning/eval/specs/safety_redteam_v1.yaml

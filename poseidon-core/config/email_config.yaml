@@ -1,0 +1,5 @@
+# config/email_config.yaml
+SMTP_SERVER: "smtp.office365.com"
+IMAP_SERVER: "outlook.office365.com"
+smtp_port: 587
+IMAP_USER: "poseidon-ai@cedeaseafood.com"

@@ -1,0 +1,14 @@
+# OneDrive OAuth configuration for SOP access.
+# Fill in the Azure AD app credentials that have Files.Read.All access.
+
+tenant_id: "YOUR_AZURE_AD_TENANT_ID"
+client_id: "YOUR_AZURE_APP_CLIENT_ID"
+# Optional: provide a client secret to use the client-credentials flow instead of device login.
+client_secret: ""
+scopes:
+  - "Files.Read.All"
+redirect_uri: "http://localhost:53682/callback"  # Only used for interactive flows
+
+# Root folder (or shared drive path) where SOP documents live.
+# The document tools will append "CDA SOP Master" if the folder name is missing.
+folder_path: "Shared Documents"
